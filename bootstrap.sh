@@ -1,12 +1,18 @@
+# Set timezone locale
+echo "Australia/Perth" | sudo tee /etc/timezone
+export LANGUAGE=en_AU.utf-8
+export LANG=en_AU.utf-8
+export LC_ALL=en_AU.utf-8
+sudo locale-gen en_AU.utf-8
+sudo dpkg-reconfigure --frontend noninteractive tzdata locales
+
+echo 'gem: --no-ri --no-rdoc' > .gemrc
+
+
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password root'
 sudo apt-get update
-sudo apt-get -y install mysql-server-5.5 php5-mysql libsqlite3-dev apache2 php5 php5-dev build-essential php-pear
-
-
-# Set timezone
-echo "Australia/Perth" | sudo tee /etc/timezone
-sudo dpkg-reconfigure --frontend noninteractive tzdata
+sudo apt-get -y install mysql-server-5.5 php5-mysql libsqlite3-dev apache2 php5 php5-dev build-essential php-pear curl
 
 
 # Setup database
@@ -69,7 +75,18 @@ then
     sudo touch /var/log/phpsetup
 fi
 
+# Install drush
+if [ ! -f /var/log/drushsetup ];
+then
+    curl -sS https://getcomposer.org/installer | php
+    sudo mv composer.phar /usr/local/bin/composer
+    composer global require drush/drush:6.*
+    sed -i '1i export PATH="$HOME/.composer/vendor/bin:$PATH"' $HOME/.bashrc
+
+    sudo touch /var/log/drushsetup
+fi
+
 
 # Make sure things are up and running as they should be
-mailcatcher --http-ip=192.168.56.101
+mailcatcher --http-ip=192.168.56.102
 sudo service apache2 restart
