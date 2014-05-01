@@ -6,8 +6,9 @@ export LC_ALL=en_AU.utf-8
 sudo locale-gen en_AU.utf-8
 sudo dpkg-reconfigure --frontend noninteractive tzdata locales
 
-echo 'gem: --no-ri --no-rdoc' > .gemrc
 
+# Install required packages
+echo 'gem: --no-ri --no-rdoc' > .gemrc
 
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password root'
@@ -69,6 +70,7 @@ then
 
     sudo touch /var/log/phpsetup
 fi
+
 
 # Install latest stable drush (6.x)
 if [ ! -f /var/log/drushsetup ];

@@ -28,13 +28,13 @@ A VirtualBox VM configured by Vagrant with a LAMP stack and other tools for Drup
 ## Setup
 The `Vagrantfile` shares the local folder: `./www`.  This is the web root of the website you want hosted in the VM.  If this folder dosn't exist it will be created when `vagrant up` is run. I recommend symlinking the folder from your current project to the vagrant folder and then you can just change the symlink to move between projects - e.g. `ln -fs ~/Sites/dev ./www`. You can do this either before or after `vagrant up`.
 
-When you first boot the VM or recreate it, you might see some warning messages from apache about not being able to determine the ServerName.  The bootstrap file eventually fixes this as it goes through its process.  There is also an rdoc notice that can be ignored.
-
 Edit your local hosts file to point a domain to 192.168.56.102 then use that domain in your browser to hit the site your VM is serving.
+
+When you first boot the VM or recreate it, you might see some warning messages. These are usually harmless and are due to upgraded packages behaving slightly differently. 
 
 ## What is the bootstrap.sh script doing?
 - Sets the MySQL root password to `root`
-- Updates software on the VM
+- Updates package lists
 - Installs necessary packages
 - Deletes the `test` database in MySQL
 - Creates the `devdb` MySQL database and user
@@ -42,7 +42,6 @@ Edit your local hosts file to point a domain to 192.168.56.102 then use that dom
 - Enables mod_rewrite
 - Allows use of .htaccess files
 - Install MailCatcher
-- Starts MailCatcher
 - Installs XDebug
 - Sets PHP configuration values:
 	- Send mail via MailCatcher
@@ -51,8 +50,9 @@ Edit your local hosts file to point a domain to 192.168.56.102 then use that dom
 	- Turns on `html_errors`
 	- Tells PHP about XDebug
 - Installs Composer and uses that to install Drush 
+- Starts MailCatcher
 - Restarts Apache
 
 ## MailCatcher
-- Load [http://192.168.56.102:1080/](http://192.168.56.102:1080/) in your browser to view the [MailCatcher](http://mailcatcher.me/) interface. This catches email being sent and let's you view it via a web interface rather than actually sending through the internet; which is probably not what you want to do during development
+- Load [http://192.168.56.102:1080/](http://192.168.56.102:1080/) in your browser to view the [MailCatcher](http://mailcatcher.me/) interface. This catches email being sent and let's you view it via a web interface rather than actually sending through the internet; which is probably not what you want to do during development.
 
