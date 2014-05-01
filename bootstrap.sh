@@ -25,11 +25,6 @@ then
     echo "flush privileges" | mysql -uroot -proot
 
     sudo touch /var/log/databasesetup
-
-    if [ -f /var/sqldump/database.sql ];
-    then
-        mysql -uroot -proot devdb < /var/sqldump/database.sql
-    fi
 fi
 
 
@@ -75,13 +70,13 @@ then
     sudo touch /var/log/phpsetup
 fi
 
-# Install drush
+# Install latest stable drush (6.x)
 if [ ! -f /var/log/drushsetup ];
 then
     curl -sS https://getcomposer.org/installer | php
     sudo mv composer.phar /usr/local/bin/composer
-    composer global require drush/drush:6.*
-    sed -i '1i export PATH="$HOME/.composer/vendor/bin:$PATH"' $HOME/.bashrc
+    sudo -u vagrant -i composer global require drush/drush:6.*
+    sudo -u vagrant -i sed -i '1i export PATH="$HOME/.composer/vendor/bin:$PATH"' /home/vagrant/.bashrc
 
     sudo touch /var/log/drushsetup
 fi
